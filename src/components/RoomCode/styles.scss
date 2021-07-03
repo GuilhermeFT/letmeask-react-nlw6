@@ -9,6 +9,11 @@
 
   display: flex;
 
+  &.dark {
+    background: transparent;
+    color: #fff;
+  }
+
   div {
     background: #835afd;
     padding: 0 12px;
@@ -26,5 +31,13 @@
     width: 230px;
     font-size: 14px;
     font-weight: 500;
+  }
+}
+
+@media (max-width: 768px) {
+  .room-code {
+    span {
+      display: none;
+    }
   }
 }

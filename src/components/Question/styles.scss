@@ -8,11 +8,10 @@
     margin-top: 8px;
   }
 
-  
   &.highlighted {
     background: #f4f0ff;
     border: 1px solid #835afd;
-    
+
     footer .user-info span {
       color: #29292e;
     }
@@ -80,5 +79,39 @@ footer {
     &:hover {
       filter: brightness(0.7);
     }
+  }
+}
+
+.question.dark {
+  background: #313131;
+
+  p {
+    color: #fff;
+  }
+
+  footer {
+    .user-info {
+      > span {
+        color: #fff;
+      }
+    }
+
+    button {
+      svg path {
+        stroke: #ccc;
+      }
+    }
+  }
+
+  &.highlighted {
+    background: #2b2633;
+
+    footer .user-info span {
+      color: #ccc;
+    }
+  }
+
+  &.answered {
+    background: #121215;
   }
 }

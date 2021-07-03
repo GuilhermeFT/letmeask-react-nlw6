@@ -3,16 +3,20 @@ import { Link, useHistory } from "react-router-dom";
 import { Button } from "../components/Button";
 
 import illustrationImg from "../assets/images/illustration.svg";
+import logoDarkImg from "../assets/images/logo-dark.svg";
 import logoImg from "../assets/images/logo.svg";
 
 import "../styles/auth.scss";
 import { database } from "../services/firebase";
 import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../hooks/useTheme";
 
 export function NewRoom() {
   const { user } = useAuth();
   const [newRoom, setNewRoom] = useState("");
   const history = useHistory();
+
+  const { theme } = useTheme();
 
   async function handleCreateRoom(event: FormEvent) {
     event.preventDefault();
@@ -28,11 +32,11 @@ export function NewRoom() {
       authorId: user?.id,
     });
 
-    history.push(`/rooms/${firebaseRoom.key}`);
+    history.push(`/admin/rooms/${firebaseRoom.key}`);
   }
 
   return (
-    <div id="page-auth">
+    <div id="page-auth" className={theme}>
       <aside>
         <img
           src={illustrationImg}
@@ -43,7 +47,12 @@ export function NewRoom() {
       </aside>
       <main>
         <div className="main-content">
-          <img src={logoImg} alt="Letmeask" />
+          <Link to="/">
+            <img
+              src={theme === "dark" ? logoDarkImg : logoImg}
+              alt="Letmeask"
+            />
+          </Link>
           <h2>Criar uma nova sala</h2>
           <form onSubmit={handleCreateRoom}>
             <input

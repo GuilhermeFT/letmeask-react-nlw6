@@ -1,6 +1,9 @@
 import { ReactNode } from "react";
 import cx from "classnames";
-import "../styles/question.scss";
+
+import "./styles.scss";
+import { useTheme } from "../../hooks/useTheme";
+
 type QuestionProps = {
   content: string;
   author: {
@@ -18,9 +21,10 @@ export function Question({
   isAnswered = false,
   isHighlighted = false,
 }: QuestionProps) {
+  const { theme } = useTheme();
   return (
     <div
-      className={cx("question", {
+      className={cx(`question ${theme}`, {
         answered: isAnswered,
         highlighted: isHighlighted && !isAnswered,
       })}

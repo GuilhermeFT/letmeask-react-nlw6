@@ -1,29 +1,49 @@
-import { useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { Button } from "../components/Button";
+import { ThemeButton } from "../components/ThemeButton";
 
 import logoImg from "../assets/images/logo.svg";
+import logoDarkImg from "../assets/images/logo-dark.svg";
 
-import "../styles/room.scss";
 import { RoomCode } from "../components/RoomCode";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 import { database } from "../services/firebase";
 import { Question } from "../components/Question";
 import { useRoom } from "../hooks/useRoom";
 
+import "../styles/room.scss";
+import { useTheme } from "../hooks/useTheme";
+
 type RoomParams = {
   id: string;
 };
 
 export function Room() {
+  const history = useHistory();
   const { user } = useAuth();
   const params = useParams<RoomParams>();
   const [newQuestion, setNewQuestion] = useState("");
 
+  const { theme } = useTheme();
+
   const roomId = params.id;
 
   const { title, questions } = useRoom(roomId);
+
+  useEffect(() => {
+    async function checkRoom() {
+      const roomRef = await database.ref(`rooms/${roomId}`).get();
+      if (roomRef.val().endedAt) {
+        alert("Room already closed.");
+        history.push("/");
+      }
+    }
+    if (user?.id && roomId && history) {
+      checkRoom();
+    }
+  }, [history, roomId, user?.id]);
 
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
@@ -66,15 +86,21 @@ export function Room() {
   }
 
   return (
-    <div id="page-room">
+    <div id="page-room" className={theme}>
       <header>
         <div className="content">
-          <img src={logoImg} alt="" />
+          <Link to="/">
+            <img
+              src={theme === "dark" ? logoDarkImg : logoImg}
+              alt="Letmeask"
+            />
+          </Link>
           <RoomCode code={roomId} />
         </div>
       </header>
 
       <main>
+        <ThemeButton />
         <div className="room-title">
           <h1>Sala {title}</h1>
           {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}

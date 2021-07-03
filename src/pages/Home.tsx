@@ -1,20 +1,28 @@
 import { useHistory } from "react-router-dom";
 import { Button } from "../components/Button";
+import { ThemeButton } from "../components/ThemeButton";
 import { useAuth } from "../hooks/useAuth";
 
 import googleIconImg from "../assets/images/google-icon.svg";
 import illustrationImg from "../assets/images/illustration.svg";
 import logoImg from "../assets/images/logo.svg";
+import logoDarkImg from "../assets/images/logo-dark.svg";
 
 import "../styles/auth.scss";
+
 import { FormEvent } from "react";
 import { useState } from "react";
 import { database } from "../services/firebase";
+import { useTheme } from "../hooks/useTheme";
 
 export function Home() {
   const history = useHistory();
+
+  const { theme } = useTheme();
   const { user, signInWithGoogle } = useAuth();
+
   const [roomCode, setRoomCode] = useState("");
+
   async function handleCreateRoom() {
     if (!user) {
       await signInWithGoogle();
@@ -44,7 +52,7 @@ export function Home() {
   }
 
   return (
-    <div id="page-auth">
+    <div id="page-auth" className={theme}>
       <aside>
         <img
           src={illustrationImg}
@@ -54,8 +62,14 @@ export function Home() {
         <p>Tire as dúvidas da sua audiência em tempo-real</p>
       </aside>
       <main>
+        <ThemeButton />
+        <img
+          className="image-background"
+          src={illustrationImg}
+          alt="Ilustração simbolizando perguntas e respostas"
+        />
         <div className="main-content">
-          <img src={logoImg} alt="Letmeask" />
+          <img src={theme === "dark" ? logoDarkImg : logoImg} alt="Letmeask" />
           <button onClick={handleCreateRoom} className="create-room">
             <img src={googleIconImg} alt="Logo do Google" />
             Crie sua sala com o Google
